@@ -1,69 +1,90 @@
-import Image from "next/image";
+import StoryCard from '@/components/StoryCard';
+import { getAllStories } from '@/lib/stories';
+import { Sparkles, BookOpen } from 'lucide-react';
 
-export default function Home() {
+export default function HomePage() {
+  const stories = getAllStories();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{ minHeight: '100vh' }}>
+      {/* Hero */}
+      <section style={{
+        maxWidth: '48rem',
+        margin: '0 auto',
+        padding: '4rem 1.5rem 3rem',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          marginBottom: '1.5rem',
+          padding: '0.375rem 1rem',
+          borderRadius: '9999px',
+          fontSize: '0.7rem',
+          fontWeight: '600',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          background: '#f0e8d8',
+          color: '#c8823a',
+          border: '1px solid #e0c898',
+        }}>
+          <Sparkles style={{ width: '12px', height: '12px' }} />
+          Fresh Stories Weekly
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <h1 style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontWeight: '900',
+          lineHeight: '1.1',
+          marginBottom: '1.25rem',
+          color: '#1a1208',
+          fontSize: 'clamp(2.2rem, 6vw, 4rem)',
+        }}>
+          Stories that{' '}
+          <span className="gradient-text" style={{ fontStyle: 'italic' }}>stay</span>
+          {' '}with you
+        </h1>
+
+        <p style={{
+          maxWidth: '36rem',
+          margin: '0 auto 1.5rem',
+          fontSize: '1.05rem',
+          lineHeight: '1.75',
+          color: '#7a6a5a',
+        }}>
+          Short reads for long days. Handpicked tales of mystery, love, loss, and life.
+        </p>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#9a8a7a' }}>
+          <BookOpen style={{ width: '16px', height: '16px', color: '#c8823a' }} />
+          <span>{stories.length} stories and counting</span>
         </div>
-      </main>
+      </section>
+
+      {/* Stories grid */}
+      <section style={{
+        maxWidth: '64rem',
+        margin: '0 auto',
+        padding: '0 1.5rem 5rem',
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 22rem), 1fr))',
+          gap: '1.25rem',
+          alignItems: 'stretch',
+        }}>
+          {stories.map((story, i) => (
+            <StoryCard key={story.slug} story={story} index={i} />
+          ))}
+        </div>
+
+        {stories.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '5rem 0', color: '#9a8a7a' }}>
+            <p>Koi story nahi hai. Add karo content/stories/ me.</p>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

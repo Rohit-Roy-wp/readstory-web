@@ -6,4 +6,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;   // <-- module.exports ki jagah yeh
+module.exports = nextConfig;

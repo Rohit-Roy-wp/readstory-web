@@ -1,0 +1,110 @@
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Clock, ArrowRight } from 'lucide-react';
+
+export default function StoryCard({ story, index = 0 }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.05, duration: 0.4 }}
+            className="h-full"
+        >
+            <Link href={`/stories/${story.slug}`} className="group block h-full">
+                <div
+                    className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col"
+                    style={{ background: '#ffffff', border: '1px solid #e0d5c5' }}
+                >
+                    {/* Cover image */}
+                    <div className="relative overflow-hidden flex-shrink-0" style={{ height: '200px' }}>
+                        <img
+                            src={story.cover}
+                            alt={story.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 55%)' }}
+                        />
+                        <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
+                            {story.tags.slice(0, 2).map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="text-xs text-white px-2.5 py-0.5 rounded-full font-medium"
+                                    style={{ background: 'rgba(25,25,25,0.7)', backdropFilter: 'blur(4px)' }}
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Card content */}
+                    <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+
+                        {/* Title — fixed 2-line height (2 * 1.5rem) */}
+                        <h3
+                            className="font-serif text-xl font-bold"
+                            style={{
+                                color: '#1a1208',
+                                lineHeight: '1.4',
+                                height: '1.5rem',           // 2 lines * 1.75rem
+                                overflow: 'hidden',
+                                marginBottom: '0.5rem',
+                                width: '100%',
+                            }}
+                        >
+                            {story.title}
+                        </h3>
+
+                        {/* Excerpt — fixed 2-line height (2 * 1.4rem) */}
+                        <p
+                            className="text-sm"
+                            style={{
+                                color: '#7a6a5a',
+                                lineHeight: '1.4',
+                                height: '2.8rem',           // 2 lines * 1.4rem
+                                overflow: 'hidden',
+                                marginBottom: '0.75rem',
+                                width: '100%',
+                            }}
+                        >
+                            {story.excerpt}
+                        </p>
+
+                        {/* Footer row */}
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                fontSize: '0.75rem',
+                                borderTop: '1px solid #e8dfd0',
+                                color: '#9a8a7a',
+                                paddingTop: '0.75rem',
+                                marginTop: 'auto',
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <span style={{ fontWeight: '600', color: '#5a4a3a' }}>
+                                    {story.author}
+                                </span>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    <Clock style={{ width: '12px', height: '12px' }} />
+                                    {story.readTime}
+                                </span>
+                            </div>
+                            <ArrowRight
+                                className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0"
+                                style={{ color: '#c8823a' }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </Link>
+        </motion.div>
+    );
+}
