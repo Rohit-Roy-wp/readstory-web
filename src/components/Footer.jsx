@@ -4,7 +4,7 @@ export default function Footer() {
     return (
         <footer
             style={{
-                marginTop: '5rem',
+                marginTop: '1rem',
                 borderTop: '1px solid var(--border-color)',
                 background: 'var(--bg-primary)',
                 transition: 'background-color 0.3s ease, border-color 0.3s ease',

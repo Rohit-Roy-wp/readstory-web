@@ -28,7 +28,7 @@ export default async function StoryPage({ params }) {
     if (!story) notFound();
 
     return (
-        <article style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
+        <article style={{ minHeight: '100vh', paddingBottom: '1rem' }}>
             <ReadingProgress />
 
             <div style={{ position: 'relative', overflow: 'hidden', height: 'clamp(220px, 40vw, 400px)' }}>
@@ -137,7 +137,7 @@ export default async function StoryPage({ params }) {
                     <MDXRemote source={story.content} />
                 </div>
 
-                <div style={{ textAlign: 'center', margin: '4rem 0 2rem', fontSize: '1.5rem', color: 'var(--accent)' }}>
+                <div style={{ textAlign: 'center', margin: '2rem 0 2rem', fontSize: '1.5rem', color: 'var(--accent)' }}>
                     ✦ ✦ ✦
                 </div>
 

@@ -109,7 +109,7 @@ export default function StoriesGrid({ stories, lang = 'en' }) {
                 )}
             </section>
 
-            <section style={{ maxWidth: '64rem', margin: '0 auto', padding: '0 1.5rem 5rem' }}>
+            <section style={{ maxWidth: '64rem', margin: '0 auto', padding: '0 1.5rem 2rem' }}>
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 22rem), 1fr))',
