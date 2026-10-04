@@ -26,9 +26,9 @@ export default function HomePage() {
           fontWeight: '600',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
-          background: '#f0e8d8',
-          color: '#c8823a',
-          border: '1px solid #e0c898',
+          background: 'var(--bg-tag)',
+          color: 'var(--accent)',
+          border: '1px solid var(--border-tag)',
         }}>
           <Sparkles style={{ width: '12px', height: '12px' }} />
           Fresh Stories Weekly
@@ -39,7 +39,7 @@ export default function HomePage() {
           fontWeight: '900',
           lineHeight: '1.1',
           marginBottom: '1.25rem',
-          color: '#1a1208',
+          color: 'var(--text-primary)',
           fontSize: 'clamp(2.2rem, 6vw, 4rem)',
         }}>
           Stories that{' '}
@@ -52,21 +52,18 @@ export default function HomePage() {
           margin: '0 auto 1.5rem',
           fontSize: '1.05rem',
           lineHeight: '1.75',
-          color: '#7a6a5a',
+          color: 'var(--text-muted)',
         }}>
           Short reads for long days. Handpicked tales of mystery, love, loss, and life.
         </p>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#9a8a7a' }}>
-          <BookOpen style={{ width: '16px', height: '16px', color: '#c8823a' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.875rem', color: 'var(--text-light)' }}>
+          <BookOpen style={{ width: '16px', height: '16px', color: 'var(--accent)' }} />
           <span>{stories.length} stories and counting</span>
         </div>
       </section>
 
-      {/* Language Tabs */}
       <LanguageTabs currentLang="en" />
-
-      {/* Stories Grid */}
       <StoriesGrid stories={stories} lang="en" />
     </div>
   );

@@ -20,7 +20,7 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
             <Link href={storyUrl} className="group block h-full">
                 <div
                     className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col"
-                    style={{ background: '#ffffff', border: '1px solid #e0d5c5' }}
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
                 >
                     {/* Cover image */}
                     <div className="relative overflow-hidden flex-shrink-0" style={{ height: '200px' }}>
@@ -49,13 +49,12 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                     {/* Card content */}
                     <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
 
-                        {/* Title — fixed 2-line height */}
                         <h3
                             className="font-serif text-xl font-bold"
                             style={{
-                                color: '#1a1208',
+                                color: 'var(--text-primary)',
                                 lineHeight: '1.4',
-                                height: '3.5rem',         // 2 lines * 1.75rem
+                                height: '3.5rem',
                                 overflow: 'hidden',
                                 marginBottom: '0.5rem',
                                 width: '100%',
@@ -64,13 +63,12 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                             {story.title}
                         </h3>
 
-                        {/* Excerpt — fixed 2-line height */}
                         <p
                             className="text-sm"
                             style={{
-                                color: '#7a6a5a',
+                                color: 'var(--text-muted)',
                                 lineHeight: '1.4',
-                                height: '2.8rem',         // 2 lines * 1.4rem
+                                height: '2.8rem',
                                 overflow: 'hidden',
                                 marginBottom: '0.75rem',
                                 width: '100%',
@@ -79,21 +77,20 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                             {story.excerpt}
                         </p>
 
-                        {/* Footer row */}
                         <div
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 fontSize: '0.75rem',
-                                borderTop: '1px solid #e8dfd0',
-                                color: '#9a8a7a',
+                                borderTop: '1px solid var(--border-light)',
+                                color: 'var(--text-light)',
                                 paddingTop: '0.75rem',
                                 marginTop: 'auto',
                             }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <span style={{ fontWeight: '600', color: '#5a4a3a' }}>
+                                <span style={{ fontWeight: '600', color: 'var(--text-secondary)' }}>
                                     {story.author}
                                 </span>
                                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -103,7 +100,7 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                             </div>
                             <ArrowRight
                                 className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0"
-                                style={{ color: '#c8823a' }}
+                                style={{ color: 'var(--accent)' }}
                             />
                         </div>
                     </div>

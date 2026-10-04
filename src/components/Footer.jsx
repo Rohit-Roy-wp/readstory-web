@@ -4,67 +4,44 @@ export default function Footer() {
     return (
         <footer
             style={{
-                marginTop: '2rem',
-                borderTop: '1px solid #e0d5c5',
-                background: '#f5f0e8',
+                marginTop: '5rem',
+                borderTop: '1px solid var(--border-color)',
+                background: 'var(--bg-primary)',
+                transition: 'background-color 0.3s ease, border-color 0.3s ease',
             }}
         >
-            <div
-                style={{
-                    maxWidth: '64rem',
-                    margin: '0 auto',
-                    padding: '1rem 1.5rem',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '1rem',
-                    }}
-                >
-                    {/* Logo */}
+            <div style={{ maxWidth: '64rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
+                <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+                }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <BookOpen style={{ width: '20px', height: '20px', color: '#c8823a' }} />
-                        <span
-                            className="gradient-text"
-                            style={{
-                                fontFamily: "'Playfair Display', Georgia, serif",
-                                fontSize: '1.1rem',
-                                fontWeight: '700',
-                            }}
-                        >
+                        <BookOpen style={{ width: '20px', height: '20px', color: 'var(--accent)' }} />
+                        <span className="gradient-text" style={{
+                            fontFamily: "'Playfair Display', Georgia, serif",
+                            fontSize: '1.1rem',
+                            fontWeight: '700',
+                        }}>
                             ReadStory
                         </span>
                     </div>
 
-                    {/* Made with love */}
-                    <p
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.375rem',
-                            fontSize: '0.875rem',
-                            color: '#7a6a5a',
-                        }}
-                    >
+                    <p style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        fontSize: '0.875rem',
+                        color: 'var(--text-muted)',
+                    }}>
                         Made with{' '}
-                        <Heart
-                            style={{
-                                width: '16px',
-                                height: '16px',
-                                color: '#c8823a',
-                                fill: '#c8823a',
-                            }}
-                        />{' '}
+                        <Heart style={{ width: '16px', height: '16px', color: 'var(--accent)', fill: 'var(--accent)' }} />{' '}
                         by Rohit
                     </p>
 
-                    {/* Copyright */}
-                    <p style={{ fontSize: '0.75rem', color: '#9a8a7a' }}>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>
                         © {new Date().getFullYear()} ReadStory
                     </p>
                 </div>

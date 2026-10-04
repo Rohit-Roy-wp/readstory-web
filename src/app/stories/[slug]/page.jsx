@@ -7,12 +7,12 @@ import ReadingProgress from '@/components/ReadingProgress';
 import ShareButton from '@/components/ShareButton';
 
 export async function generateStaticParams() {
-    return getAllSlugs();
+    return getAllSlugs('en');
 }
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
-    const story = getStoryBySlug(slug);
+    const story = getStoryBySlug(slug, 'en');
     if (!story) return { title: 'Story not found' };
 
     return {
@@ -23,16 +23,14 @@ export async function generateMetadata({ params }) {
 
 export default async function StoryPage({ params }) {
     const { slug } = await params;
-    const story = getStoryBySlug(slug);
+    const story = getStoryBySlug(slug, 'en');
 
     if (!story) notFound();
 
     return (
         <article style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
-
-            {/* ReadingProgress component */}
             <ReadingProgress />
-            {/* Hero cover image */}
+
             <div style={{ position: 'relative', overflow: 'hidden', height: 'clamp(220px, 40vw, 400px)' }}>
                 <img
                     src={story.cover}
@@ -41,11 +39,11 @@ export default async function StoryPage({ params }) {
                 />
                 <div style={{
                     position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(245,240,232,0.92) 0%, rgba(245,240,232,0.5) 40%, transparent 70%)',
+                    background: 'linear-gradient(to top, var(--bg-primary) 0%, transparent 70%)',
+                    opacity: 0.92,
                 }} />
             </div>
 
-            {/* Content */}
             <div style={{
                 maxWidth: '44rem',
                 margin: '0 auto',
@@ -60,7 +58,7 @@ export default async function StoryPage({ params }) {
                         alignItems: 'center',
                         gap: '0.375rem',
                         fontSize: '0.875rem',
-                        color: '#7a6a5a',
+                        color: 'var(--text-muted)',
                         marginBottom: '1.25rem',
                         textDecoration: 'none',
                     }}
@@ -78,9 +76,9 @@ export default async function StoryPage({ params }) {
                                 padding: '0.2rem 0.75rem',
                                 borderRadius: '9999px',
                                 fontWeight: '500',
-                                background: '#f0e8d8',
-                                color: '#8B4513',
-                                border: '1px solid #e0c898',
+                                background: 'var(--bg-tag)',
+                                color: 'var(--accent-dark)',
+                                border: '1px solid var(--border-tag)',
                             }}
                         >
                             {tag}
@@ -93,7 +91,7 @@ export default async function StoryPage({ params }) {
                     fontWeight: '900',
                     lineHeight: '1.15',
                     marginBottom: '1.25rem',
-                    color: '#1a1208',
+                    color: 'var(--text-primary)',
                     fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
                 }}>
                     {story.title}
@@ -105,21 +103,21 @@ export default async function StoryPage({ params }) {
                     alignItems: 'center',
                     gap: '1.25rem',
                     fontSize: '0.875rem',
-                    color: '#7a6a5a',
-                    marginBottom: '2.5rem',
+                    color: 'var(--text-muted)',
+                    marginBottom: '2rem',
                     paddingBottom: '1.5rem',
-                    borderBottom: '1px solid #e0d5c5',
+                    borderBottom: '1px solid var(--border-color)',
                 }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                        <User style={{ width: '16px', height: '16px', color: '#c8823a' }} />
+                        <User style={{ width: '16px', height: '16px', color: 'var(--accent)' }} />
                         {story.author}
                     </span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                        <Clock style={{ width: '16px', height: '16px', color: '#c8823a' }} />
+                        <Clock style={{ width: '16px', height: '16px', color: 'var(--accent)' }} />
                         {story.readTime}
                     </span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                        <Calendar style={{ width: '16px', height: '16px', color: '#c8823a' }} />
+                        <Calendar style={{ width: '16px', height: '16px', color: 'var(--accent)' }} />
                         {new Date(story.date).toLocaleDateString('en-IN', {
                             day: 'numeric',
                             month: 'short',
@@ -128,8 +126,6 @@ export default async function StoryPage({ params }) {
                     </span>
                 </div>
 
-
-                {/* Share Button */}
                 <div style={{ marginBottom: '2rem' }}>
                     <ShareButton
                         title={story.title}
@@ -141,7 +137,7 @@ export default async function StoryPage({ params }) {
                     <MDXRemote source={story.content} />
                 </div>
 
-                <div style={{ textAlign: 'center', margin: '4rem 0 2rem', fontSize: '1.5rem', color: '#c8823a' }}>
+                <div style={{ textAlign: 'center', margin: '4rem 0 2rem', fontSize: '1.5rem', color: 'var(--accent)' }}>
                     ✦ ✦ ✦
                 </div>
 
@@ -153,7 +149,7 @@ export default async function StoryPage({ params }) {
                             alignItems: 'center',
                             gap: '0.375rem',
                             fontSize: '0.875rem',
-                            color: '#7a6a5a',
+                            color: 'var(--text-muted)',
                             textDecoration: 'none',
                         }}
                     >

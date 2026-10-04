@@ -10,9 +10,9 @@ export default function LanguageTabs({ currentLang = 'en' }) {
                 display: 'inline-flex',
                 gap: '0.25rem',
                 padding: '0.25rem',
-                background: '#f0e8d8',
+                background: 'var(--bg-tag)',
                 borderRadius: '9999px',
-                border: '1px solid #e0c898',
+                border: '1px solid var(--border-tag)',
             }}>
                 <Link
                     href="/"
@@ -25,8 +25,9 @@ export default function LanguageTabs({ currentLang = 'en' }) {
                         fontSize: '0.85rem',
                         fontWeight: '600',
                         textDecoration: 'none',
-                        background: currentLang === 'en' ? '#c8823a' : 'transparent',
-                        color: currentLang === 'en' ? '#ffffff' : '#7a6a5a',
+                        background: currentLang === 'en' ? 'var(--accent)' : 'transparent',
+                        color: currentLang === 'en' ? 'var(--text-on-accent)' : 'var(--text-muted)',
+                        transition: 'all 0.2s',
                     }}
                 >
                     <Languages style={{ width: '14px', height: '14px' }} />
@@ -43,8 +44,9 @@ export default function LanguageTabs({ currentLang = 'en' }) {
                         fontSize: '0.85rem',
                         fontWeight: '600',
                         textDecoration: 'none',
-                        background: currentLang === 'hi' ? '#c8823a' : 'transparent',
-                        color: currentLang === 'hi' ? '#ffffff' : '#7a6a5a',
+                        background: currentLang === 'hi' ? 'var(--accent)' : 'transparent',
+                        color: currentLang === 'hi' ? 'var(--text-on-accent)' : 'var(--text-muted)',
+                        transition: 'all 0.2s',
                     }}
                 >
                     Hinglish
