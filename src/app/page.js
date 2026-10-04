@@ -1,4 +1,4 @@
-import StoryCard from '@/components/StoryCard';
+import StoriesGrid from '@/components/StoriesGrid';
 import { getAllStories } from '@/lib/stories';
 import { Sparkles, BookOpen } from 'lucide-react';
 
@@ -62,29 +62,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stories grid */}
-      <section style={{
-        maxWidth: '64rem',
-        margin: '0 auto',
-        padding: '0 1.5rem 5rem',
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 22rem), 1fr))',
-          gap: '1.25rem',
-          alignItems: 'stretch',
-        }}>
-          {stories.map((story, i) => (
-            <StoryCard key={story.slug} story={story} index={i} />
-          ))}
-        </div>
-
-        {stories.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '5rem 0', color: '#9a8a7a' }}>
-            <p>Koi story nahi hai. Add karo content/stories/ me.</p>
-          </div>
-        )}
-      </section>
+      {/* Client component with search + filter + grid */}
+      <StoriesGrid stories={stories} />
     </div>
   );
 }

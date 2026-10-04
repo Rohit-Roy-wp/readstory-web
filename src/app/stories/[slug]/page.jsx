@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { ArrowLeft, Clock, User, Calendar } from 'lucide-react';
 import { getStoryBySlug, getAllSlugs } from '@/lib/stories';
+import ReadingProgress from '@/components/ReadingProgress';
+import ShareButton from '@/components/ShareButton';
 
 export async function generateStaticParams() {
     return getAllSlugs();
@@ -27,6 +29,9 @@ export default async function StoryPage({ params }) {
 
     return (
         <article style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
+
+            {/* ReadingProgress component */}
+            <ReadingProgress />
             {/* Hero cover image */}
             <div style={{ position: 'relative', overflow: 'hidden', height: 'clamp(220px, 40vw, 400px)' }}>
                 <img
@@ -121,6 +126,15 @@ export default async function StoryPage({ params }) {
                             year: 'numeric',
                         })}
                     </span>
+                </div>
+
+
+                {/* Share Button */}
+                <div style={{ marginBottom: '2rem' }}>
+                    <ShareButton
+                        title={story.title}
+                        url={`https://readstory-web.vercel.app/stories/${slug}`}
+                    />
                 </div>
 
                 <div className="prose-story">
