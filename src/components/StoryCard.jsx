@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Clock, ArrowRight } from 'lucide-react';
 
-export default function StoryCard({ story, index = 0 }) {
+export default function StoryCard({ story, index = 0, lang = 'en' }) {
+    const storyUrl = lang === 'hi'
+        ? `/stories-hi/${story.slug}`
+        : `/stories/${story.slug}`;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -13,7 +17,7 @@ export default function StoryCard({ story, index = 0 }) {
             transition={{ delay: index * 0.05, duration: 0.4 }}
             className="h-full"
         >
-            <Link href={`/stories/${story.slug}`} className="group block h-full">
+            <Link href={storyUrl} className="group block h-full">
                 <div
                     className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl h-full flex flex-col"
                     style={{ background: '#ffffff', border: '1px solid #e0d5c5' }}
@@ -45,13 +49,13 @@ export default function StoryCard({ story, index = 0 }) {
                     {/* Card content */}
                     <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
 
-                        {/* Title — fixed 2-line height (2 * 1.5rem) */}
+                        {/* Title — fixed 2-line height */}
                         <h3
                             className="font-serif text-xl font-bold"
                             style={{
                                 color: '#1a1208',
                                 lineHeight: '1.4',
-                                height: '1.5rem',           // 2 lines * 1.75rem
+                                height: '3.5rem',         // 2 lines * 1.75rem
                                 overflow: 'hidden',
                                 marginBottom: '0.5rem',
                                 width: '100%',
@@ -60,13 +64,13 @@ export default function StoryCard({ story, index = 0 }) {
                             {story.title}
                         </h3>
 
-                        {/* Excerpt — fixed 2-line height (2 * 1.4rem) */}
+                        {/* Excerpt — fixed 2-line height */}
                         <p
                             className="text-sm"
                             style={{
                                 color: '#7a6a5a',
                                 lineHeight: '1.4',
-                                height: '2.8rem',           // 2 lines * 1.4rem
+                                height: '2.8rem',         // 2 lines * 1.4rem
                                 overflow: 'hidden',
                                 marginBottom: '0.75rem',
                                 width: '100%',

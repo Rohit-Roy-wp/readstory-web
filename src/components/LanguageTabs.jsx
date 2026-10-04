@@ -1,0 +1,55 @@
+'use client';
+
+import Link from 'next/link';
+import { Languages } from 'lucide-react';
+
+export default function LanguageTabs({ currentLang = 'en' }) {
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem', padding: '0 1.5rem' }}>
+            <div style={{
+                display: 'inline-flex',
+                gap: '0.25rem',
+                padding: '0.25rem',
+                background: '#f0e8d8',
+                borderRadius: '9999px',
+                border: '1px solid #e0c898',
+            }}>
+                <Link
+                    href="/"
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        padding: '0.5rem 1.25rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.85rem',
+                        fontWeight: '600',
+                        textDecoration: 'none',
+                        background: currentLang === 'en' ? '#c8823a' : 'transparent',
+                        color: currentLang === 'en' ? '#ffffff' : '#7a6a5a',
+                    }}
+                >
+                    <Languages style={{ width: '14px', height: '14px' }} />
+                    English
+                </Link>
+                <Link
+                    href="/hinglish"
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        padding: '0.5rem 1.25rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.85rem',
+                        fontWeight: '600',
+                        textDecoration: 'none',
+                        background: currentLang === 'hi' ? '#c8823a' : 'transparent',
+                        color: currentLang === 'hi' ? '#ffffff' : '#7a6a5a',
+                    }}
+                >
+                    Hinglish
+                </Link>
+            </div>
+        </div>
+    );
+}

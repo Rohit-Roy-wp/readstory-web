@@ -2,56 +2,70 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const STORIES_DIR = path.join(process.cwd(), 'content/stories');
+const contentDir = path.join(process.cwd(), 'content');
 
-export function getAllStories() {
-    if (!fs.existsSync(STORIES_DIR)) return [];
-    const files = fs.readdirSync(STORIES_DIR);
-    return files
-        .filter((file) => file.endsWith('.mdx'))
-        .map((file) => {
-            const slug = file.replace(/\.mdx$/, '');
-            const filePath = path.join(STORIES_DIR, file);
-            const raw = fs.readFileSync(filePath, 'utf-8');
-            const { data } = matter(raw);
-            return {
-                slug,
-                title: data.title || 'Untitled',
-                excerpt: data.excerpt || '',
-                author: data.author || 'Anonymous',
-                date: data.date || '',
-                tags: data.tags || [],
-                cover: data.cover || '/images/placeholder.jpg',
-                readTime: data.readTime || '5 min',
-            };
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+function getContentDir(lang = 'en') {
+    return path.join(contentDir, lang === 'hi' ? 'stories-hi' : 'stories');
 }
 
-export function getStoryBySlug(slug) {
-    const filePath = path.join(STORIES_DIR, `${slug}.mdx`);
+export function getAllStories(lang = 'en') {
+    const dir = getContentDir(lang);
+    if (!fs.existsSync(dir)) return [];
+
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith('.mdx'));
+
+    const stories = files.map((filename) => {
+        const slug = filename.replace('.mdx', '');
+        const filePath = path.join(dir, filename);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        const { data } = matter(fileContent);
+
+        return {
+            slug,
+            title: data.title || 'Untitled',
+            excerpt: data.excerpt || '',
+            author: data.author || 'Unknown',
+            date: data.date || '',
+            readTime: data.readTime || '5 min',
+            cover: data.cover || '/images/temp.jpg',
+            tags: data.tags || [],
+            language: lang,
+        };
+    });
+
+    return stories.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+export function getStoryBySlug(slug, lang = 'en') {
+    const dir = getContentDir(lang);
+    const filePath = path.join(dir, `${slug}.mdx`);
+
     if (!fs.existsSync(filePath)) return null;
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const { data, content } = matter(raw);
+
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const { data, content } = matter(fileContent);
+
     return {
         slug,
         title: data.title || 'Untitled',
         excerpt: data.excerpt || '',
-        author: data.author || 'Anonymous',
+        author: data.author || 'Unknown',
         date: data.date || '',
-        tags: data.tags || [],
-        cover: data.cover || '/images/placeholder.jpg',
         readTime: data.readTime || '5 min',
+        cover: data.cover || '/images/temp.jpg',
+        tags: data.tags || [],
+        language: lang,
         content,
     };
 }
 
-export function getAllSlugs() {
-    if (!fs.existsSync(STORIES_DIR)) return [];
-    return fs
-        .readdirSync(STORIES_DIR)
-        .filter((file) => file.endsWith('.mdx'))
-        .map((file) => ({
-            slug: file.replace(/\.mdx$/, ''),
+export function getAllSlugs(lang = 'en') {
+    const dir = getContentDir(lang);
+    if (!fs.existsSync(dir)) return [];
+
+    return fs.readdirSync(dir)
+        .filter((f) => f.endsWith('.mdx'))
+        .map((filename) => ({
+            slug: filename.replace('.mdx', ''),
         }));
 }

@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import StoryCard from '@/components/StoryCard';
 import { Search, X } from 'lucide-react';
 
-export default function StoriesGrid({ stories }) {
+export default function StoriesGrid({ stories, lang = 'en' }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTag, setActiveTag] = useState('All');
 
@@ -62,7 +62,7 @@ export default function StoriesGrid({ stories }) {
                     }} />
                     <input
                         type="text"
-                        placeholder="Search stories..."
+                        placeholder={lang === 'hi' ? 'Kahaniyan dhundho...' : 'Search stories...'}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
@@ -151,7 +151,7 @@ export default function StoriesGrid({ stories }) {
                     alignItems: 'stretch',
                 }}>
                     {filteredStories.map((story, i) => (
-                        <StoryCard key={story.slug} story={story} index={i} />
+                        <StoryCard key={story.slug} story={story} index={i} lang={lang} />
                     ))}
                 </div>
 
@@ -161,8 +161,12 @@ export default function StoriesGrid({ stories }) {
                         padding: '5rem 0',
                         color: '#9a8a7a',
                     }}>
-                        <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>No stories found</p>
-                        <p style={{ fontSize: '0.85rem' }}>Try different search or clear filters</p>
+                        <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+                            {lang === 'hi' ? 'Koi kahani nahi mili' : 'No stories found'}
+                        </p>
+                        <p style={{ fontSize: '0.85rem' }}>
+                            {lang === 'hi' ? 'Kuch aur try karo' : 'Try different search or clear filters'}
+                        </p>
                     </div>
                 )}
             </section>

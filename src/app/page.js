@@ -1,9 +1,10 @@
 import StoriesGrid from '@/components/StoriesGrid';
+import LanguageTabs from '@/components/LanguageTabs';
 import { getAllStories } from '@/lib/stories';
 import { Sparkles, BookOpen } from 'lucide-react';
 
 export default function HomePage() {
-  const stories = getAllStories();
+  const stories = getAllStories('en');
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -11,7 +12,7 @@ export default function HomePage() {
       <section style={{
         maxWidth: '48rem',
         margin: '0 auto',
-        padding: '4rem 1.5rem 3rem',
+        padding: '4rem 1.5rem 2rem',
         textAlign: 'center',
       }}>
         <div style={{
@@ -62,8 +63,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Client component with search + filter + grid */}
-      <StoriesGrid stories={stories} />
+      {/* Language Tabs */}
+      <LanguageTabs currentLang="en" />
+
+      {/* Stories Grid */}
+      <StoriesGrid stories={stories} lang="en" />
     </div>
   );
 }
