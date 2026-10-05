@@ -2,6 +2,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ThemeProvider from '@/components/ThemeProvider';
+import { BookmarkProvider } from '@/hooks/useBookmarks';
 
 export const metadata = {
   title: 'ReadStory — Short Stories That Stay With You',
@@ -21,9 +22,11 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <BookmarkProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </BookmarkProvider>
         </ThemeProvider>
       </body>
     </html>

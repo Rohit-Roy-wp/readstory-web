@@ -1,14 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'readstory-bookmarks';
 
-export function useBookmarks() {
+const BookmarkContext = createContext({
+    bookmarks: [],
+    toggleBookmark: () => { },
+    isBookmarked: () => false,
+    mounted: false,
+});
+
+export function BookmarkProvider({ children }) {
     const [bookmarks, setBookmarks] = useState([]);
     const [mounted, setMounted] = useState(false);
 
-    // Load bookmarks from localStorage
+    // Load bookmarks on mount
     useEffect(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
@@ -21,7 +28,21 @@ export function useBookmarks() {
         setMounted(true);
     }, []);
 
-    // Save bookmarks to localStorage
+    // Sync across tabs/windows (optional but nice)
+    useEffect(() => {
+        const handleStorage = (e) => {
+            if (e.key === STORAGE_KEY && e.newValue) {
+                try {
+                    setBookmarks(JSON.parse(e.newValue));
+                } catch (err) {
+                    console.error('Failed to sync bookmarks:', err);
+                }
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
+
     const saveBookmarks = (newBookmarks) => {
         setBookmarks(newBookmarks);
         try {
@@ -31,17 +52,14 @@ export function useBookmarks() {
         }
     };
 
-    // Toggle bookmark
     const toggleBookmark = (story, lang = 'en') => {
         const key = `${lang}:${story.slug}`;
         const exists = bookmarks.find((b) => b.key === key);
 
         if (exists) {
-            // Remove
             const updated = bookmarks.filter((b) => b.key !== key);
             saveBookmarks(updated);
         } else {
-            // Add
             const updated = [
                 ...bookmarks,
                 {
@@ -61,15 +79,18 @@ export function useBookmarks() {
         }
     };
 
-    // Check if bookmarked
     const isBookmarked = (slug, lang = 'en') => {
         return bookmarks.some((b) => b.key === `${lang}:${slug}`);
     };
 
-    return {
-        bookmarks,
-        toggleBookmark,
-        isBookmarked,
-        mounted,
-    };
+    return (
+        <BookmarkContext.Provider value={{ bookmarks, toggleBookmark, isBookmarked, mounted }}>
+            {children}
+        </BookmarkContext.Provider>
+    );
+}
+
+// Hook to use in components
+export function useBookmarks() {
+    return useContext(BookmarkContext);
 }

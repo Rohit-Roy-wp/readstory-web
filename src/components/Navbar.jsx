@@ -56,38 +56,54 @@ export default function Navbar() {
                         Stories
                     </Link>
 
-                    {/* Saved Link */}
+                    {/* Saved Icon with Badge */}
                     <Link
                         href="/saved"
+                        aria-label="Saved stories"
                         style={{
                             position: 'relative',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.375rem',
-                            textDecoration: 'none',
+                            justifyContent: 'center',
+                            width: '36px',
+                            height: '36px',
+                            borderRadius: '50%',
+                            border: '1px solid var(--border-color)',
+                            background: 'var(--bg-card)',
                             color: pathname === '/saved' ? 'var(--accent)' : 'var(--text-muted)',
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            transition: 'color 0.2s',
+                            textDecoration: 'none',
+                            transition: 'all 0.2s',
                         }}
                     >
-                        <Bookmark style={{ width: '16px', height: '16px' }} />
-                        Saved
+                        <Bookmark
+                            style={{
+                                width: '18px',
+                                height: '18px',
+                                fill: pathname === '/saved' ? 'var(--accent)' : 'transparent',
+                            }}
+                        />
+
+                        {/* Count Badge — Top Right */}
                         {mounted && bookmarks.length > 0 && (
                             <span style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                position: 'absolute',
+                                top: '-4px',
+                                right: '-4px',
                                 minWidth: '18px',
                                 height: '18px',
                                 padding: '0 4px',
                                 borderRadius: '9999px',
                                 background: 'var(--accent)',
-                                color: 'var(--text-on-accent)',
+                                color: '#ffffff',
                                 fontSize: '0.65rem',
                                 fontWeight: '700',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '2px solid var(--bg-secondary)',
+                                lineHeight: 1,
                             }}>
-                                {bookmarks.length}
+                                {bookmarks.length > 9 ? '9+' : bookmarks.length}
                             </span>
                         )}
                     </Link>
