@@ -2,12 +2,23 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Bookmark } from 'lucide-react';
+import { useBookmarks } from '@/hooks/useBookmarks';
 
 export default function StoryCard({ story, index = 0, lang = 'en' }) {
+    const { toggleBookmark, isBookmarked, mounted } = useBookmarks();
+
     const storyUrl = lang === 'hi'
         ? `/stories-hi/${story.slug}`
         : `/stories/${story.slug}`;
+
+    const bookmarked = mounted && isBookmarked(story.slug, lang);
+
+    const handleBookmark = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleBookmark(story, lang);
+    };
 
     return (
         <motion.div
@@ -33,6 +44,42 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                             className="absolute inset-0"
                             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 55%)' }}
                         />
+
+                        {/* Bookmark Button — Top Right */}
+                        <button
+                            onClick={handleBookmark}
+                            aria-label={bookmarked ? 'Remove bookmark' : 'Save story'}
+                            style={{
+                                position: 'absolute',
+                                top: '0.75rem',
+                                right: '0.75rem',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                border: 'none',
+                                background: bookmarked ? 'var(--accent)' : 'rgba(0,0,0,0.55)',
+                                color: '#ffffff',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                transition: 'all 0.2s',
+                                zIndex: 10,
+                            }}
+                        >
+                            <Bookmark
+                                style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    fill: bookmarked ? '#ffffff' : 'transparent',
+                                    transition: 'fill 0.2s',
+                                }}
+                            />
+                        </button>
+
+                        {/* Tags */}
                         <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
                             {story.tags.slice(0, 2).map((tag) => (
                                 <span

@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Moon, Sun } from 'lucide-react';
+import { BookOpen, Moon, Sun, Bookmark } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
+import { useBookmarks } from '@/hooks/useBookmarks';
 
 export default function Navbar() {
     const pathname = usePathname();
     const { theme, toggleTheme } = useTheme();
+    const { bookmarks, mounted } = useBookmarks();
 
     return (
         <nav style={{
@@ -52,6 +54,42 @@ export default function Navbar() {
                         }}
                     >
                         Stories
+                    </Link>
+
+                    {/* Saved Link */}
+                    <Link
+                        href="/saved"
+                        style={{
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                            textDecoration: 'none',
+                            color: pathname === '/saved' ? 'var(--accent)' : 'var(--text-muted)',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            transition: 'color 0.2s',
+                        }}
+                    >
+                        <Bookmark style={{ width: '16px', height: '16px' }} />
+                        Saved
+                        {mounted && bookmarks.length > 0 && (
+                            <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                minWidth: '18px',
+                                height: '18px',
+                                padding: '0 4px',
+                                borderRadius: '9999px',
+                                background: 'var(--accent)',
+                                color: 'var(--text-on-accent)',
+                                fontSize: '0.65rem',
+                                fontWeight: '700',
+                            }}>
+                                {bookmarks.length}
+                            </span>
+                        )}
                     </Link>
 
                     {/* Dark Mode Toggle */}
