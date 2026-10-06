@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { BookOpen, Moon, Sun, Bookmark } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import { useBookmarks } from '@/hooks/useBookmarks';
@@ -10,6 +11,30 @@ export default function Navbar() {
     const pathname = usePathname();
     const { theme, toggleTheme } = useTheme();
     const { bookmarks, mounted } = useBookmarks();
+    const [userLang, setUserLang] = useState('en');
+
+    // Detect user's preferred language
+    useEffect(() => {
+        // Priority: URL path > localStorage > default
+        if (pathname === '/hinglish' || pathname.startsWith('/stories-hi')) {
+            setUserLang('hi');
+        } else if (pathname === '/' || pathname.startsWith('/stories/')) {
+            setUserLang('en');
+        } else {
+            // For other pages (like /saved), use localStorage
+            try {
+                const savedLang = localStorage.getItem('readstory-lang');
+                if (savedLang === 'hi' || savedLang === 'en') {
+                    setUserLang(savedLang);
+                }
+            } catch (err) {
+                // Ignore
+            }
+        }
+    }, [pathname]);
+
+    // Dynamic home link based on language
+    const homeLink = userLang === 'hi' ? '/hinglish' : '/';
 
     return (
         <nav style={{
@@ -31,7 +56,7 @@ export default function Navbar() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
             }}>
-                <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+                <Link href={homeLink} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
                     <BookOpen style={{ width: '22px', height: '22px', color: 'var(--accent)' }} />
                     <span className="gradient-text" style={{
                         fontFamily: "'Playfair Display', Georgia, serif",
@@ -44,10 +69,10 @@ export default function Navbar() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <Link
-                        href="/"
+                        href={homeLink}
                         style={{
                             textDecoration: 'none',
-                            color: pathname === '/' ? 'var(--accent)' : 'var(--text-muted)',
+                            color: (pathname === '/' || pathname === '/hinglish') ? 'var(--accent)' : 'var(--text-muted)',
                             fontSize: '0.875rem',
                             fontWeight: '500',
                             transition: 'color 0.2s',

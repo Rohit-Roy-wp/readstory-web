@@ -12,12 +12,12 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
         ? `/stories-hi/${story.slug}`
         : `/stories/${story.slug}`;
 
-    const bookmarked = mounted && isBookmarked(story.slug, lang);
+    const bookmarked = mounted && isBookmarked(story.slug);
 
     const handleBookmark = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        toggleBookmark(story, lang);
+        toggleBookmark(story);
     };
 
     return (
@@ -45,7 +45,7 @@ export default function StoryCard({ story, index = 0, lang = 'en' }) {
                             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 55%)' }}
                         />
 
-                        {/* Bookmark Button — Top Right */}
+                        {/* Bookmark Button */}
                         <button
                             onClick={handleBookmark}
                             aria-label={bookmarked ? 'Remove bookmark' : 'Save story'}

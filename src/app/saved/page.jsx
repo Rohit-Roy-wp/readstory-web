@@ -1,12 +1,43 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { Bookmark, ArrowLeft } from 'lucide-react';
 import StoryCard from '@/components/StoryCard';
 import { useBookmarks } from '@/hooks/useBookmarks';
 
 export default function SavedPage() {
     const { bookmarks, mounted } = useBookmarks();
+    const [currentLang, setCurrentLang] = useState('en');
+    const [storyLookup, setStoryLookup] = useState({});
+
+    // Load current language from localStorage
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('readstory-lang');
+            if (saved === 'hi' || saved === 'en') {
+                setCurrentLang(saved);
+            }
+        } catch (err) {
+            // Ignore
+        }
+    }, []);
+
+    // Fetch story lookup from API
+    useEffect(() => {
+        async function fetchLookup() {
+            try {
+                const res = await fetch('/api/story-lookup');
+                if (res.ok) {
+                    const data = await res.json();
+                    setStoryLookup(data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch story lookup:', err);
+            }
+        }
+        fetchLookup();
+    }, []);
 
     if (!mounted) {
         return (
@@ -15,6 +46,46 @@ export default function SavedPage() {
             </div>
         );
     }
+
+    // Merge bookmark data with current language content
+    const mergedStories = bookmarks.map((b) => {
+        const liveData = storyLookup[b.slug]?.[currentLang];
+        return {
+            ...b,
+            // Override with current language content if available
+            title: liveData?.title || b.title,
+            excerpt: liveData?.excerpt || b.excerpt,
+            cover: liveData?.cover || b.cover,
+            author: liveData?.author || b.author,
+            readTime: liveData?.readTime || b.readTime,
+            tags: liveData?.tags || b.tags,
+            lang: currentLang,
+        };
+    });
+
+    // Text based on language
+    const text = {
+        en: {
+            badge: 'Your Collection',
+            title: 'Saved Stories',
+            empty: 'No stories saved yet. Click the bookmark icon on any story to save it.',
+            count: (n) => `${n} ${n === 1 ? 'story' : 'stories'} saved`,
+            cta: 'Explore more stories',
+            emptyCta: 'Explore Stories',
+            emptyHint: 'Saved stories will appear here. Click the bookmark icon on any story card.',
+        },
+        hi: {
+            badge: 'Aapka Collection',
+            title: 'Saved Kahaniyan',
+            empty: 'Abhi tak koi kahani save nahi ki. Kisi bhi story card pe bookmark icon pe click karo.',
+            count: (n) => `${n} ${n === 1 ? 'kahani' : 'kahaniyan'} saved`,
+            cta: 'Aur kahaniyan padho',
+            emptyCta: 'Kahaniyan Explore Karo',
+            emptyHint: 'Saved kahaniyan yahan dikhengi. Kisi bhi story card pe bookmark icon pe click karo.',
+        },
+    };
+
+    const t = text[currentLang];
 
     return (
         <div style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
@@ -40,7 +111,7 @@ export default function SavedPage() {
                     border: '1px solid var(--border-tag)',
                 }}>
                     <Bookmark style={{ width: '12px', height: '12px' }} />
-                    Your Collection
+                    {t.badge}
                 </div>
 
                 <h1 style={{
@@ -51,7 +122,7 @@ export default function SavedPage() {
                     color: 'var(--text-primary)',
                     fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                 }}>
-                    Saved Stories
+                    {t.title}
                 </h1>
 
                 <p style={{
@@ -61,12 +132,10 @@ export default function SavedPage() {
                     lineHeight: '1.75',
                     color: 'var(--text-muted)',
                 }}>
-                    {bookmarks.length === 0
-                        ? 'Abhi tak koi story save nahi ki. Bookmark icon pe click karke save karo.'
-                        : `${bookmarks.length} ${bookmarks.length === 1 ? 'story' : 'stories'} saved`}
+                    {mergedStories.length === 0 ? t.empty : t.count(mergedStories.length)}
                 </p>
 
-                {bookmarks.length > 0 && (
+                {mergedStories.length > 0 && (
                     <Link
                         href="/"
                         style={{
@@ -79,12 +148,12 @@ export default function SavedPage() {
                         }}
                     >
                         <ArrowLeft style={{ width: '16px', height: '16px' }} />
-                        Explore more stories
+                        {t.cta}
                     </Link>
                 )}
             </section>
 
-            {bookmarks.length > 0 && (
+            {mergedStories.length > 0 && (
                 <section style={{
                     maxWidth: '64rem',
                     margin: '0 auto',
@@ -96,14 +165,14 @@ export default function SavedPage() {
                         gap: '1.5rem',
                         alignItems: 'stretch',
                     }}>
-                        {bookmarks.map((story, i) => (
-                            <StoryCard key={story.key} story={story} index={i} lang={story.lang} />
+                        {mergedStories.map((story, i) => (
+                            <StoryCard key={story.key} story={story} index={i} lang={currentLang} />
                         ))}
                     </div>
                 </section>
             )}
 
-            {bookmarks.length === 0 && (
+            {mergedStories.length === 0 && (
                 <section style={{
                     maxWidth: '32rem',
                     margin: '2rem auto 0',
@@ -123,7 +192,7 @@ export default function SavedPage() {
                             margin: '0 auto 1rem',
                         }} />
                         <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-                            Saved stories yahan dikhengi. Kisi bhi story card pe bookmark icon pe click karo.
+                            {t.emptyHint}
                         </p>
                         <Link
                             href="/"
@@ -140,7 +209,7 @@ export default function SavedPage() {
                                 fontWeight: '600',
                             }}
                         >
-                            Explore Stories
+                            {t.emptyCta}
                         </Link>
                     </div>
                 </section>

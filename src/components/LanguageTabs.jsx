@@ -2,8 +2,26 @@
 
 import Link from 'next/link';
 import { Languages } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function LanguageTabs({ currentLang = 'en' }) {
+    // Save preference to localStorage
+    useEffect(() => {
+        try {
+            localStorage.setItem('readstory-lang', currentLang);
+        } catch (err) {
+            // Ignore
+        }
+    }, [currentLang]);
+
+    const handleLangClick = (lang) => {
+        try {
+            localStorage.setItem('readstory-lang', lang);
+        } catch (err) {
+            // Ignore
+        }
+    };
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem', padding: '0 1.5rem' }}>
             <div style={{
@@ -16,6 +34,7 @@ export default function LanguageTabs({ currentLang = 'en' }) {
             }}>
                 <Link
                     href="/"
+                    onClick={() => handleLangClick('en')}
                     style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -35,6 +54,7 @@ export default function LanguageTabs({ currentLang = 'en' }) {
                 </Link>
                 <Link
                     href="/hinglish"
+                    onClick={() => handleLangClick('hi')}
                     style={{
                         display: 'inline-flex',
                         alignItems: 'center',

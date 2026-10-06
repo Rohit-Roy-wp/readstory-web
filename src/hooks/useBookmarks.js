@@ -15,12 +15,25 @@ export function BookmarkProvider({ children }) {
     const [bookmarks, setBookmarks] = useState([]);
     const [mounted, setMounted] = useState(false);
 
-    // Load bookmarks on mount
     useEffect(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-                setBookmarks(JSON.parse(saved));
+                const parsed = JSON.parse(saved);
+                // Migrate old keys (with lang prefix) to new format (slug only)
+                const migrated = parsed.map((b) => {
+                    if (b.key && b.key.includes(':')) {
+                        return { ...b, key: b.slug };
+                    }
+                    return b;
+                });
+                // Remove duplicates (same slug)
+                const unique = migrated.filter(
+                    (b, i, arr) => arr.findIndex((x) => x.slug === b.slug) === i
+                );
+                setBookmarks(unique);
+                // Save migrated version
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(unique));
             }
         } catch (err) {
             console.error('Failed to load bookmarks:', err);
@@ -28,7 +41,6 @@ export function BookmarkProvider({ children }) {
         setMounted(true);
     }, []);
 
-    // Sync across tabs/windows (optional but nice)
     useEffect(() => {
         const handleStorage = (e) => {
             if (e.key === STORAGE_KEY && e.newValue) {
@@ -52,8 +64,8 @@ export function BookmarkProvider({ children }) {
         }
     };
 
-    const toggleBookmark = (story, lang = 'en') => {
-        const key = `${lang}:${story.slug}`;
+    const toggleBookmark = (story) => {
+        const key = story.slug; // Slug only — language agnostic
         const exists = bookmarks.find((b) => b.key === key);
 
         if (exists) {
@@ -71,7 +83,7 @@ export function BookmarkProvider({ children }) {
                     author: story.author,
                     readTime: story.readTime,
                     tags: story.tags,
-                    lang,
+                    // Note: lang nahi save kar rahe — language dynamic decide hogi
                     savedAt: new Date().toISOString(),
                 },
             ];
@@ -79,8 +91,8 @@ export function BookmarkProvider({ children }) {
         }
     };
 
-    const isBookmarked = (slug, lang = 'en') => {
-        return bookmarks.some((b) => b.key === `${lang}:${slug}`);
+    const isBookmarked = (slug) => {
+        return bookmarks.some((b) => b.key === slug);
     };
 
     return (
@@ -90,7 +102,6 @@ export function BookmarkProvider({ children }) {
     );
 }
 
-// Hook to use in components
 export function useBookmarks() {
     return useContext(BookmarkContext);
 }
