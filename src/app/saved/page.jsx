@@ -23,11 +23,11 @@ export default function SavedPage() {
         }
     }, []);
 
-    // Fetch story lookup from API
+    // Fetch story lookup from static JSON
     useEffect(() => {
         async function fetchLookup() {
             try {
-                const res = await fetch('/api/story-lookup');
+                const res = await fetch('/story-lookup.json');
                 if (res.ok) {
                     const data = await res.json();
                     setStoryLookup(data);
@@ -52,7 +52,6 @@ export default function SavedPage() {
         const liveData = storyLookup[b.slug]?.[currentLang];
         return {
             ...b,
-            // Override with current language content if available
             title: liveData?.title || b.title,
             excerpt: liveData?.excerpt || b.excerpt,
             cover: liveData?.cover || b.cover,
